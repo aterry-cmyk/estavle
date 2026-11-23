@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estavle</title>
+<meta name="description" content="Tu casa propia, aunque no sepas por dónde empezar.">
+<link rel="icon" href="brand/estavle-favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="img/il-1.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+/* Opción O · "La historia de tu casa", illustrated.
+   N's eight-scene story, now with one painted world: eight Higgsfield illustrations of the same family.
+   Each scene opens through an arch (the window/door shape), the camera drifts and follows the pointer,
+   and light carries the story: the sun, the path that lights up, the phone, the open door, the window at night.
+   Copy: marketing/STORY-v2.md. All people are illustrated characters, not customers. */
+:root{
+  color-scheme:dark;
+  --senal:#14CE00; --monte:#0D3B26; --noche:#02251a; --hoja:#0B7A1A; --brote:#E3F5D9;
+  --tinta:#141316; --papel:#FBF7F0; --arena:#F2EADC; --maiz:#F4B63F;
+  --sans:"Plus Jakarta Sans",system-ui,sans-serif; --serif:"Newsreader",Georgia,serif;
+  --ease:cubic-bezier(.75,0,.2,1); --soft:cubic-bezier(.2,.7,.2,1);
+  --W:max(100vw,176.8vh); --H:max(56.56vw,100vh);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--noche);color:#fff;font-family:var(--sans)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--senal);outline-offset:3px;border-radius:6px}
+.lg{display:block;height:24px;width:auto;aspect-ratio:1155.56/245.679;color:#fff;transition:color .6s}
+.needs{background:#FFE36B;color:#3a2a00;font-family:var(--sans);font-style:normal;font-weight:700;font-size:12px;padding:1px 6px;border-radius:5px}
+
+/* chrome */
+.top{position:fixed;left:0;right:0;top:0;z-index:30;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:20px clamp(18px,3vw,36px);transition:color .6s}
+.dots{display:flex;gap:18px}
+.dots button{position:relative;width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.45;transition:all .4s var(--soft)}
+.dots button.on{opacity:1;background:transparent;box-shadow:0 0 0 2px currentColor;transform:scale(1.45)}
+.dots button span{position:absolute;top:20px;left:50%;translate:-50% 0;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:0;transition:opacity .3s}
+.dots button.on span,.dots button:hover span{opacity:1}
+.tr{display:flex;gap:8px;justify-content:flex-end}
+.pill{min-height:42px;border:1.5px solid currentColor;border-radius:999px;padding:0 16px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;transition:background .25s,color .25s}
+.pill:hover{background:#fff;color:var(--tinta)}
+.pill.go{background:var(--senal);border-color:var(--senal);color:var(--tinta)}
+@media(max-width:760px){.dots{display:none}.top{grid-template-columns:1fr auto}.tr .faqb{display:none}.pill{padding:0 12px}}
+.prog{position:fixed;left:0;bottom:0;height:4px;background:var(--senal);z-index:31;transition:width 1s var(--ease)}
+
+/* intro */
+#intro{position:fixed;inset:0;z-index:60;background:#0b1a3d url(img/il-1.jpg) center/cover;display:grid;place-items:center;padding:24px;transition:opacity 1.2s var(--ease),visibility 0s 1.2s}
+#intro::before{content:"";position:absolute;inset:0;background:rgba(6,14,40,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+#intro.gone{opacity:0;visibility:hidden}
+#intro p{position:relative;font-family:var(--serif);font-size:clamp(24px,2.6vw,38px);line-height:1.3;max-width:26ch;text-align:center;min-height:3em}
+#intro p::after{content:"";display:inline-block;width:2px;height:1em;background:var(--senal);margin-left:4px;vertical-align:-.15em;animation:cur 1s steps(2) infinite}
+@keyframes cur{50%{opacity:0}}
+#skip{position:fixed;right:clamp(18px,3vw,36px);top:24px;z-index:61;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
+
+/* scenes: open through an arch */
+.scene{position:fixed;inset:0;visibility:hidden;display:grid;place-items:center;overflow:hidden;z-index:1;
+  clip-path:inset(100% 0 0 0 round 50vw 50vw 0 0);transition:clip-path 1.15s var(--ease),visibility 0s 1.2s}
+.scene.back{clip-path:inset(0 0 100% 0 round 0 0 50vw 50vw)}
+.scene.on{visibility:visible;z-index:2;clip-path:inset(0 0 0 0 round 0 0 0 0);transition:clip-path 1.15s var(--ease)}
+.scene.under{visibility:visible;z-index:1;clip-path:inset(0)}
+.mv{position:absolute;inset:0;transition:transform 1.15s var(--ease),filter 1.15s}
+.scene:not(.on) .mv{transform:scale(1.14)}
+.scene.on .mv{transform:none}
+.scene.under .mv{transform:translateY(-7%) scale(1.04);filter:brightness(.7)}
+.scene.under.rev .mv{transform:translateY(7%) scale(1.04)}
+.cam{position:absolute;inset:-3%;transition:transform 1.4s var(--soft)}
+.fr{position:absolute;width:var(--W);height:var(--H);left:calc((106vw - var(--W)) * var(--fx,.5));top:calc((106vh - var(--H)) * var(--fy,.5))}
+.fr>img{position:absolute;inset:0;width:100%;height:100%;display:block;transform-origin:var(--ox,50%) var(--oy,50%)}
+.fr>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform-origin:var(--ox,50%) var(--oy,50%);opacity:0;transition:opacity .8s}
+.fr>video.ok{opacity:1}
+.scene.on .fr>img,.scene.on .fr>video{animation:kb 22s var(--soft) both}
+.has-v .gl,.has-v .final-gl{display:none}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.08)}}
+
+/* cut-paper layer */
+.spl{position:absolute;inset:0;z-index:2;pointer-events:none}
+.sp{position:absolute;display:block;transform:translate(calc(var(--px,0) * var(--d) * -1px),calc(var(--py,0) * var(--d) * -1px));transition:transform 1.3s var(--soft)}
+.sp>b{display:block;transform:scaleX(var(--fl))}
+.sp img{display:block;width:100%;height:auto;filter:drop-shadow(0 22px 26px rgba(0,0,0,.28));opacity:0;
+  transform:translate(var(--fx),var(--fy)) rotate(var(--r0)) scale(.85);transition:opacity .9s var(--soft),transform 1.6s var(--soft);transition-delay:var(--dl)}
+.scene.on .sp img{opacity:1;transform:rotate(var(--r))}
+.scene.under .sp img{opacity:0;transition-delay:0s;transition-duration:.6s}
+.sp.night img{filter:brightness(.42) saturate(.8) drop-shadow(0 22px 26px rgba(0,0,0,.4))}
+.scene.on .sp.sway>b{animation:sway 7s ease-in-out infinite;transform-origin:50% 100%}
+.scene.on .sp.hover>b{animation:hover 2.6s ease-in-out infinite}
+.scene.on .sp.drift>b{animation:drift 9s ease-in-out infinite}
+.scene.on .sp.swing>b{animation:swing 4.5s ease-in-out infinite;transform-origin:50% 4%}
+.scene.on .sp.spin>b{animation:spin 60s linear infinite}
+@keyframes sway{0%,100%{transform:scaleX(var(--fl)) rotate(0)}50%{transform:scaleX(var(--fl)) rotate(2.2deg)}}
+@keyframes hover{0%,100%{transform:scaleX(var(--fl)) translateY(0)}50%{transform:scaleX(var(--fl)) translateY(-14px) rotate(-3deg)}}
+@keyframes drift{0%,100%{transform:translate(0,0) rotate(0)}33%{transform:translate(10px,-16px) rotate(3deg)}66%{transform:translate(-8px,-6px) rotate(-2deg)}}
+@keyframes swing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* light */
+.gl{position:absolute;translate:-50% -50%;aspect-ratio:1;border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(255,226,140,.85) 0%,rgba(255,196,80,.35) 35%,rgba(255,180,60,0) 70%);opacity:0}
+.scene.on .gl{animation:breathe 4.5s ease-in-out 1.2s infinite}
+@keyframes breathe{0%,100%{opacity:.35;transform:scale(.92)}50%{opacity:.9;transform:scale(1.08)}}
+.gl.g{background:radial-gradient(circle,rgba(170,255,140,.9) 0%,rgba(20,206,0,.45) 35%,rgba(20,206,0,0) 70%)}
+.scene.on .path .gl{animation:stone 3.6s ease-in-out infinite;animation-delay:calc(1s + var(--k) * .22s)}
+@keyframes stone{0%,100%{opacity:0;transform:scale(.6)}18%{opacity:1;transform:scale(1.1)}45%{opacity:.15;transform:scale(.9)}}
+.tw{position:absolute;width:.5%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:radial-gradient(circle,#fff 0,rgba(255,255,255,0) 70%);mix-blend-mode:screen}
+.scene.on .tw{animation:tw 3s ease-in-out infinite;animation-delay:calc(var(--k) * .45s)}
+@keyframes tw{0%,100%{transform:scale(1);opacity:.2}50%{transform:scale(3.2);opacity:1}}
+.lit{position:absolute;inset:0;background:#000;opacity:.55;transition:opacity 2.2s var(--ease) 1.4s;pointer-events:none}
+.scene.on .lit{opacity:0}
+.win-gl{position:absolute;translate:-50% -50%;aspect-ratio:1;border-radius:50%;pointer-events:none;mix-blend-mode:screen;opacity:0;transform:scale(.4);
+  background:radial-gradient(circle,rgba(255,226,140,.95) 0%,rgba(255,190,70,.35) 38%,rgba(255,180,60,0) 70%);transition:opacity 1.2s,transform 1.2s var(--soft)}
+.win-gl.on{opacity:1;transform:scale(1)}
+.final-gl{transition:opacity 2s 2.4s}
+.scene.on .final-gl{opacity:1;animation:breathe 5s ease-in-out 4s infinite}
+
+/* text */
+.txt{position:relative;z-index:3;padding:0 20px;display:grid;gap:18px;pointer-events:none;align-self:center;justify-self:center;text-align:center;justify-items:center}
+.txt>*{pointer-events:auto}
+.txt.left{justify-self:start;text-align:left;justify-items:start;padding-left:clamp(20px,7vw,130px);max-width:min(46vw,720px)}
+.txt.left .sub{max-width:34ch}
+.txt.cover{justify-self:start;text-align:left;justify-items:start;padding-left:47vw;align-self:start;padding-top:15vh}
+.txt.high{align-self:start;padding-top:13vh}
+.n{font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.n b{display:inline-grid;place-items:center;min-width:30px;height:30px;padding:0 8px;border-radius:999px;border:1.5px solid currentColor;font-size:11px;letter-spacing:.08em}
+.h{font-family:var(--serif);font-weight:500;font-size:clamp(46px,6.6vw,112px);line-height:.96;letter-spacing:-.025em;max-width:11ch;text-wrap:balance}
+.h em{font-style:italic;font-weight:400}
+.h.md{font-size:clamp(40px,5.2vw,88px);max-width:14ch}
+.sub{font-size:clamp(16px,1.2vw,19px);max-width:38ch;line-height:1.55;font-weight:500}
+.read{margin-top:4px;background:#fff;color:var(--tinta);border-radius:999px;min-height:50px;padding:0 24px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;transition:background .25s,transform .25s,color .25s}
+.read:hover{background:var(--senal);color:var(--tinta);transform:translateY(-2px)}
+.read.dark{background:var(--tinta);color:#fff}.read.dark:hover{background:var(--senal);color:var(--tinta)}
+.read.go{background:var(--senal);color:var(--tinta)}
+.ink{color:var(--tinta)}
+/* word-by-word rise */
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.w>span{display:inline-block;transform:translateY(105%);transition:transform 1s var(--soft);transition-delay:calc(.75s + var(--i) * .07s)}
+.scene.on .w>span{transform:none}
+.txt>:not(.h){opacity:0;transform:translateY(14px);transition:opacity .8s var(--soft),transform .8s var(--soft);transition-delay:1.25s}
+.txt>.n{transition-delay:.6s}
+.scene.on .txt>:not(.h){opacity:1;transform:none}
+.txt>.read,.txt>.sub+.sub{transition-delay:1.45s}
+
+/* windows building (Para ti) */
+.bld{position:relative;z-index:3;display:grid;gap:14px;justify-items:center;width:min(640px,100% - 32px);padding-top:30px;text-align:center}
+.facade{position:relative;width:100%;margin-top:clamp(64px,7vw,92px);background:#5c1730;border-radius:6px 6px 0 0;padding:clamp(18px,3vw,30px);display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.6vw,18px);box-shadow:0 40px 80px rgba(0,0,0,.35);
+  transform:translateY(40px);opacity:0;transition:transform 1.1s var(--soft) .9s,opacity 1s .9s}
+.scene.on .facade{transform:none;opacity:1}
+.facade::before{content:"";position:absolute;left:-4%;right:-4%;bottom:100%;height:clamp(56px,6.5vw,86px);background:#C8553D;clip-path:polygon(0 100%,50% 0,100% 100%)}
+.facade::after{content:"";position:absolute;right:12%;bottom:calc(100% + clamp(30px,3.5vw,46px));width:34px;height:clamp(40px,4.5vw,60px);background:#8a2a20;z-index:-1}
+.win{position:relative;aspect-ratio:5/3;border-radius:999px 999px 8px 8px;background:#2a0f1c;border:3px solid #F3A493;display:grid;place-items:end center;padding:10px;font-size:clamp(12px,1.15vw,15px);font-weight:700;line-height:1.2;text-align:center;color:rgba(255,255,255,.88);transition:background .5s var(--soft),color .3s,box-shadow .5s}
+.win::before{content:"";position:absolute;left:50%;top:14%;bottom:34%;width:3px;background:#F3A493;translate:-50% 0;opacity:.55}
+.win:hover{background:#3d1528}
+.win[aria-pressed=true]{background:var(--maiz);color:var(--tinta);box-shadow:0 0 60px 10px rgba(244,182,63,.55)}
+.win[aria-pressed=true]::before{opacity:.2}
+.ans{min-height:3.2em;font-family:var(--serif);font-style:italic;font-size:clamp(19px,1.9vw,26px);line-height:1.3;max-width:38ch}
+@media(max-width:600px){.facade{grid-template-columns:repeat(2,1fr)}}
+
+.nav{position:fixed;bottom:22px;left:50%;translate:-50% 0;z-index:20;display:flex;gap:14px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;transition:color .6s}
+.nav button{width:44px;height:44px;border-radius:50%;border:1.5px solid currentColor;font-size:16px;letter-spacing:0;opacity:.8;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.nav button:hover{opacity:1;background:rgba(255,255,255,.18)}
+.nav span{opacity:.8}
+
+/* phones: text on top, the picture rises from the bottom and fades into the sky colour */
+@media(max-width:760px),(max-aspect-ratio:4/5){
+  .cam{inset:0}
+  .fr{height:62svh;width:calc(62svh * 1.768);top:auto;bottom:0;left:calc((100vw - 62svh * 1.768) * var(--mx,.5));
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 24%);mask-image:linear-gradient(to bottom,transparent 0,#000 24%)}
+  .txt,.txt.left,.txt.cover,.txt.high{justify-self:center;text-align:center;justify-items:center;align-self:start;padding:88px 22px 0;max-width:none}
+  .txt.left .sub{max-width:38ch}
+  .h{font-size:clamp(40px,11vw,64px)}.h.md{font-size:clamp(36px,9.6vw,56px)}
+  .sub{font-size:15.5px}
+  .scene[data-id=parati] .fr,.scene[data-id=final] .fr{height:100svh;width:calc(100svh * 1.768);left:calc((100vw - 100svh * 1.768) * var(--mx,.5));-webkit-mask-image:none;mask-image:none}
+  .bld{padding-top:70px}
+  .sp{display:none}.sp.sway{display:block;width:34vw!important}
+  .scene[data-id=portada] .sp.hover{display:block;left:60%!important;top:36%!important;width:22vw!important}
+  .scene[data-id=paso1] .sp.sway,.scene[data-id=paso3] .sp.sway,.scene[data-id=parati] .sp.sway{display:none}
+}
+
+/* reading page */
+#page{position:fixed;inset:0;z-index:40;background:var(--papel);color:var(--tinta);overflow-y:auto;clip-path:inset(100% 0 0 0 round 50vw 50vw 0 0);transition:clip-path .95s var(--ease);visibility:hidden}
+#page.open{clip-path:inset(0 round 0);visibility:visible}
+#page .bar{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:18px clamp(18px,3vw,36px);background:rgba(251,247,240,.95);z-index:2}
+#page .bar .lg{color:var(--tinta)}
+#page .x{min-height:42px;border:1.5px solid var(--tinta);border-radius:999px;padding:0 18px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+#page .in{width:min(760px,100% - 40px);margin:0 auto;padding:clamp(30px,6vw,80px) 0 110px}
+#page .k{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--hoja)}
+#page h3{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5.4vw,76px);line-height:1;letter-spacing:-.02em;margin-top:16px}
+#page .lead{font-family:var(--serif);font-style:italic;font-size:clamp(21px,2.1vw,28px);line-height:1.35;margin-top:22px;color:#3d3a35}
+#page .ph{margin:38px 0 10px;aspect-ratio:16/9;border-radius:200px 200px 22px 22px;background:var(--arena) center/cover no-repeat}
+#page .cap{font-family:var(--serif);font-style:italic;font-size:13px;color:#6b665e}
+#page .items{display:grid;gap:12px;margin-top:32px}
+#page .item{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:20px;border-radius:18px;background:#fff;border:1px solid #e9dfcc}
+#page .item i{width:48px;height:48px;border-radius:50%;background:var(--brote);color:var(--hoja);display:grid;place-items:center;font-family:var(--serif);font-size:20px}
+#page .item b{display:block;font-size:18px}
+#page .item p{color:#5e5a54;font-size:16px;margin-top:2px}
+#page details{border-bottom:1px solid #e2d8c6}
+#page summary{list-style:none;cursor:pointer;padding:20px 0;font-weight:700;font-size:19px;display:flex;justify-content:space-between;gap:16px}
+#page summary::-webkit-details-marker{display:none}
+#page summary::after{content:"+";color:var(--hoja)}
+#page details[open] summary::after{content:"–"}
+#page details .a{padding:0 0 20px;color:#5e5a54}
+#page .legal{margin-top:50px;padding-top:24px;border-top:1px solid #e2d8c6;display:grid;gap:8px;font-size:13px;color:#6b665e}
+#page .next{margin-top:50px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:12px;min-height:54px;padding:0 10px 0 24px;border-radius:999px;background:var(--senal);color:var(--tinta);font-weight:700;font-size:16px}
+.btn i{width:36px;height:36px;border-radius:50%;background:var(--tinta);color:var(--senal);display:grid;place-items:center;font-style:normal}
+.tlink{font-weight:700;color:var(--hoja);text-decoration:underline;text-underline-offset:5px}
+
+/* form */
+#flow{position:fixed;inset:0;z-index:70;display:grid;place-items:center;background:rgba(2,37,26,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);visibility:hidden;opacity:0;transition:opacity .35s,visibility 0s .35s;padding:16px}
+#flow.open{visibility:visible;opacity:1;transition:opacity .35s}
+.sheet{width:min(640px,100%);max-height:92svh;overflow-y:auto;background:var(--papel);color:var(--tinta);border-radius:26px;padding:24px clamp(20px,4vw,40px) 32px}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center}.sheet .lg{color:var(--tinta);height:20px}
+.sheet .close{width:44px;height:44px;border-radius:50%;font-size:22px}
+.fprog{display:flex;gap:6px;margin:20px 0 4px}.fprog i{flex:1;height:5px;border-radius:5px;background:#e2d8c6}.fprog i.on{background:var(--senal)}
+.fq{display:none;padding-top:18px}.fq.on{display:block}
+.fq h4{font-family:var(--serif);font-weight:500;font-size:clamp(28px,3.2vw,40px);line-height:1.05}
+.fq p{margin-top:8px;color:#5e5a54;font-size:15px}
+.opts{display:grid;gap:8px;margin-top:20px}
+.opt{text-align:left;min-height:56px;padding:0 18px;border-radius:14px;background:#fff;border:1.5px solid #e2d8c6;font-size:16px;font-weight:500}
+.opt:hover{border-color:var(--tinta)}.opt.go{background:var(--senal);border-color:var(--senal);font-weight:700}
+.inp{min-height:54px;border-radius:12px;border:1.5px solid #e2d8c6;background:#fff;padding:0 14px;font:inherit;font-size:16px;width:100%;margin-top:10px;color:var(--tinta)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}.w>span{transform:none}.txt>*{opacity:1!important;transform:none!important}.lit{opacity:0}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="logo" viewBox="0 0 1155.56 245.679"><path fill="#14CE00" d="M 187.925781 219.917969 L 187.925781 211.664062 C 187.925781 202.042969 180.128906 194.246094 170.507812 194.246094 L 27.386719 194.246094 C 17.769531 194.246094 9.96875 202.042969 9.96875 211.664062 L 9.96875 219.917969 C 9.96875 229.539062 17.769531 237.335938 27.386719 237.335938 L 170.507812 237.335938 C 180.128906 237.335938 187.925781 229.539062 187.925781 219.917969 "/><path fill="#14CE00" d="M 289.890625 97.878906 L 289.890625 89.625 C 289.890625 80.003906 282.09375 72.207031 272.472656 72.207031 L 129.351562 72.207031 C 119.730469 72.207031 111.933594 80.003906 111.933594 89.625 L 111.933594 97.878906 C 111.933594 107.5 119.730469 115.296875 129.351562 115.296875 L 272.472656 115.296875 C 282.09375 115.296875 289.890625 107.5 289.890625 97.878906 "/><path fill="#14CE00" d="M 221.628906 177.890625 L 78.507812 177.890625 C 68.886719 177.890625 61.089844 170.09375 61.089844 160.472656 L 61.089844 149.070312 C 61.089844 139.449219 68.886719 131.652344 78.507812 131.652344 L 221.628906 131.652344 C 231.246094 131.652344 239.046875 139.449219 239.046875 149.070312 L 239.046875 160.472656 C 239.046875 170.09375 231.246094 177.890625 221.628906 177.890625 "/><path fill="currentColor" d="M 428.832031 92.605469 C 430.71875 95.4375 433.867188 99.84375 433.867188 106.449219 C 433.867188 116.519531 426.945312 121.867188 417.820312 121.867188 C 411.84375 121.867188 405.863281 119.664062 400.515625 113.058594 C 394.222656 105.820312 386.988281 102.359375 377.863281 102.359375 C 365.589844 102.359375 358.355469 108.335938 358.355469 117.148438 C 358.355469 122.179688 360.242188 128.789062 374.714844 132.878906 L 393.910156 138.542969 C 419.078125 145.464844 440.160156 157.421875 440.160156 185.421875 C 440.160156 220.03125 408.066406 236.707031 375.34375 236.707031 C 347.027344 236.707031 330.039062 224.753906 321.226562 214.054688 C 319.65625 211.851562 312.734375 203.988281 312.734375 194.230469 C 312.734375 187.308594 317.136719 178.5 328.464844 178.5 C 336.960938 178.5 341.679688 183.851562 345.453125 188.570312 C 354.578125 199.894531 364.648438 203.042969 375.34375 203.042969 C 390.761719 203.042969 399.257812 196.433594 399.257812 187.625 C 399.257812 182.277344 395.796875 175.355469 380.695312 170.949219 L 362.761719 165.601562 C 330.980469 156.792969 317.765625 139.800781 317.765625 117.460938 C 317.765625 86 346.714844 69.636719 376.605469 69.636719 C 398 69.636719 418.449219 78.132812 428.832031 92.605469 "/><path fill="currentColor" d="M 550.726562 214.683594 C 550.726562 229.15625 536.570312 236.707031 515.171875 236.707031 C 493.777344 236.707031 472.070312 229.785156 472.070312 186.050781 L 472.070312 103.933594 L 462.945312 103.933594 C 452.875 103.933594 446.269531 97.324219 446.269531 87.886719 C 446.269531 78.132812 452.875 71.527344 462.945312 71.527344 L 472.070312 71.527344 L 472.070312 50.128906 C 472.070312 38.804688 481.507812 29.363281 492.835938 29.363281 C 504.160156 29.363281 513.285156 38.804688 513.285156 50.128906 L 513.285156 71.527344 L 534.050781 71.527344 C 544.433594 71.527344 550.726562 78.132812 550.726562 87.886719 C 550.726562 97.324219 544.433594 103.933594 534.050781 103.933594 L 513.285156 103.933594 L 513.285156 187.3125 C 513.285156 196.433594 516.433594 201.15625 523.355469 201.15625 C 526.816406 201.15625 531.847656 199.894531 535.308594 199.894531 C 544.75 199.265625 550.726562 204.929688 550.726562 214.683594 "/><path fill="currentColor" d="M 683.15625 153.332031 C 683.15625 117.777344 659.875 104.875 642.253906 104.875 C 621.488281 104.875 599.777344 121.238281 599.777344 153.332031 C 599.777344 185.738281 621.488281 201.785156 642.253906 201.785156 C 659.875 201.785156 683.15625 188.882812 683.15625 153.332031 M 723.113281 91.03125 L 723.113281 216.570312 C 723.113281 227.898438 713.046875 237.023438 702.035156 237.023438 C 690.707031 237.023438 681.269531 227.898438 681.269531 216.570312 L 681.269531 210.59375 C 678.75 220.347656 662.074219 237.335938 634.703125 237.335938 C 600.09375 237.335938 558.5625 210.59375 558.5625 153.332031 C 558.5625 97.324219 600.40625 69.636719 634.703125 69.636719 C 657.042969 69.636719 674.976562 81.59375 681.269531 96.382812 L 681.269531 91.03125 C 681.269531 80.019531 690.707031 70.582031 702.035156 70.582031 C 713.046875 70.582031 723.113281 80.019531 723.113281 91.03125 "/><path fill="currentColor" d="M 895.886719 89.144531 C 895.886719 92.921875 894.625 96.066406 893.367188 98.582031 L 837.992188 220.03125 C 833.273438 229.785156 826.980469 235.765625 817.226562 235.765625 C 807.472656 235.765625 801.179688 229.785156 796.773438 220.03125 L 741.085938 98.582031 C 740.140625 96.066406 738.882812 92.921875 738.882812 89.144531 C 738.882812 79.078125 747.0625 70.582031 757.761719 70.582031 C 765.628906 70.582031 773.179688 74.988281 777.582031 85.054688 L 817.226562 178.1875 L 857.183594 85.054688 C 861.273438 74.988281 868.824219 70.582031 876.691406 70.582031 C 887.703125 70.582031 895.886719 79.078125 895.886719 89.144531 "/><path fill="currentColor" d="M 932.417969 236.707031 C 921.089844 236.707031 911.652344 227.585938 911.652344 216.257812 L 911.652344 30.9375 C 911.652344 19.925781 921.089844 10.488281 932.417969 10.488281 C 943.429688 10.488281 952.871094 19.925781 952.871094 30.9375 L 952.871094 216.257812 C 952.871094 227.585938 943.429688 236.707031 932.417969 236.707031 "/><path fill="currentColor" d="M 1018.503906 139.800781 L 1097.160156 139.800781 C 1094.015625 115.574219 1076.394531 105.507812 1058.460938 105.507812 C 1040.527344 105.507812 1021.332031 115.574219 1018.503906 139.800781 M 1137.75 146.722656 C 1137.75 163.082031 1128.625 168.746094 1111.949219 168.746094 L 1018.503906 168.117188 C 1022.277344 191.085938 1040.527344 203.355469 1063.496094 203.355469 C 1074.820312 203.355469 1080.171875 200.839844 1089.609375 196.75 C 1095.273438 194.234375 1099.675781 191.714844 1105.027344 191.714844 C 1113.835938 191.714844 1119.183594 198.007812 1119.183594 205.875 C 1119.183594 210.910156 1116.984375 216.570312 1109.117188 223.179688 C 1097.476562 231.359375 1081.742188 236.707031 1061.921875 236.707031 C 1020.074219 236.707031 975.710938 210.910156 975.710938 153.644531 C 975.710938 97.011719 1022.59375 69.636719 1058.460938 69.636719 C 1094.328125 69.636719 1137.75 97.953125 1137.75 146.722656 "/></symbol>
+</defs></svg>
+
+<div id="intro" aria-live="polite"><p id="typed"></p></div>
+<button id="skip">Saltar</button>
+
+<div class="top">
+  <svg class="lg" id="tlogo" role="img" aria-label="Estavle"><use href="#logo"/></svg>
+  <nav class="dots" id="dots" aria-label="Escenas"></nav>
+  <div class="tr"><button class="pill faqb" id="faqb">Preguntas</button><button class="pill" id="lang">EN</button><button class="pill go open-flow" id="cta">Empieza aquí</button></div>
+</div>
+<main id="stage"></main>
+<div class="nav" id="navb"><button id="prev" aria-label="Anterior">←</button><span id="pos"></span><button id="next" aria-label="Siguiente">→</button></div>
+<div class="prog" id="prog"></div>
+
+<article id="page" role="dialog" aria-modal="true" aria-label="Capítulo"><div class="bar"><svg class="lg" role="img" aria-label="Estavle"><use href="#logo"/></svg><button class="x" id="pclose">Volver</button></div><div class="in" id="pin"></div></article>
+<div id="flow" role="dialog" aria-modal="true"><div class="sheet" id="sheet"></div></div>
+
+<script>
+const COPY={"es": {"tagline": "Tu casa propia, aunque no sepas por dónde empezar.", "nav": ["Inicio", "El problema", "Estavle", "El plan", "Para ti", "Tu paso"], "scroll": "Desliza para continuar", "illus": "Imagen ilustrativa", "prologo": {"lines": ["Cada mes pagas renta y piensas: algún día.", "Algún día, una casa propia. Un lugar que sea tuyo.", "Pero se ve complicado, y lo vas dejando para después."], "title": "Tu casa propia", "subtitle": "Aunque no sepas por dónde empezar.", "enter": "Ver cómo"}, "problema": {"kicker": "Por qué se siente difícil", "headline": "Querer casa no es el problema.", "items": [["Nadie te lo explica", "Te hablan de precalificación, down payment y closing, y casi nadie te lo explica en español."], ["No sabes qué piden", "No sabes qué documentos te van a pedir ni qué números mira el lender (la compañía que presta)."], ["Un “no” pesa", "Te dijeron que no, o crees que con Tax ID (ITIN) no se puede. Y dejas de preguntar."]]}, "guia": {"kicker": "Aquí entra Estavle", "headline": "No tienes que hacerlo a solas.", "body": "Estavle te ayuda a buscar y a financiar tu casa. Te explicamos cada paso y te conectamos con la gente indicada y programas que van con tu caso. <span class=\"needs\">[NEEDS: partners, programas, estados]<\/span>", "trust": ["No somos un banco ni un lender. El lender decide.", "En español, de principio a fin."]}, "plan": {"kicker": "Cómo funciona", "headline": "Tres pasos hacia tu casa propia.", "steps": [["01", "Cuéntanos de ti", "Unas preguntas desde tu celular: qué buscas, dónde quieres comprar y cómo declaras tus taxes. Así sabemos con quién conectarte."], ["02", "Documentos listos y lender", "Te damos la lista de documentos y te conectamos con un lender de nuestra red que trabaja casos como el tuyo. Él decide si precalificas."], ["03", "Encuentra tu casa", "Un agente de bienes raíces de nuestra red te ayuda a buscar casa, hacer la oferta y llegar al cierre (closing)."]], "pro": "¿Todavía no es el momento? Estavle Pro te ayuda a prepararte. <span class=\"needs\">[NEEDS: precio y periodo]<\/span>"}, "parati": {"kicker": "Para ti", "headline": "¿Dónde estás hoy?", "hint": "Toca la que se parece a ti.", "chips": [["No sé por dónde empezar", "Empieza por contarnos de ti. Te decimos cuál es tu primer paso."], ["Es mi primera casa", "Te explicamos cada término antes de que lo necesites, para que decidas con calma."], ["Tengo Tax ID (ITIN)", "Algunos lenders trabajan con Tax ID. Cuéntanos tu caso y te decimos si hay opciones en tu estado."], ["Tengo poco crédito o nada", "Cada lender pide algo distinto. Cuéntanos tu caso y te decimos qué te falta, si te falta algo."], ["Ya me dijeron que no", "Un “no” de un lender no siempre es el de todos. Cuéntanos qué pasó y vemos qué sigue."], ["Ya encontré casa", "Te conectamos con un lender de nuestra red para que revise tu caso."]]}, "faq": {"kicker": "Preguntas", "headline": "Lo que más nos preguntan", "items": [["¿Estavle me presta el dinero?", "No. Estavle no es un banco ni un lender. Te conectamos con lenders, y el lender revisa tu caso y decide."], ["¿Cuánto me cuesta?", "<span class=\"needs\">[NEEDS: ¿gratis para el comprador? ¿quién le paga a Estavle? Pro: precio y periodo]<\/span>"], ["¿Puedo comprar casa con Tax ID (ITIN)?", "Algunos lenders ofrecen préstamos con Tax ID, cada uno con sus requisitos. Te decimos si hay opciones en tu estado. <span class=\"needs\">[NEEDS: partners/estados]<\/span>"], ["¿Qué hacen con mi información?", "<span class=\"needs\">[NEEDS: política de privacidad escrita por abogado]<\/span>"], ["¿Cuánto tiempo toma?", "Depende de tu caso, del lender y de la casa. Te decimos qué sigue en cada paso."]]}, "final": {"headline": "Tu primer paso: unas preguntas.", "body": "Desde tu celular. Con lo que nos cuentes, te decimos qué sigue.", "button": "Empieza aquí", "micro": "Sin compromiso. Aquí nadie te juzga."}, "form": {"q": [["¿En qué te podemos ayudar?", "", ["Quiero comprar casa", "Ya encontré casa", "Quiero prepararme primero (Estavle Pro)", "Soy agente de bienes raíces"]], ["¿Tienes Seguro Social o Tax ID?", "Solo lo preguntamos para saber con qué lenders conectarte.", ["Seguro Social (SSN)", "Tax ID (ITIN)", "Ninguno por ahora", "Prefiero decirlo después"]], ["¿Cuándo te gustaría comprar?", "", ["Lo antes posible", "En los próximos 6 meses", "En un año o más", "Todavía no sé"]]], "contact": ["¿Cómo te contactamos?", ["Nombre", "Celular (WhatsApp)", "Email", "Estado donde quieres comprar"], "Acepto que Estavle me contacte por llamada, texto o WhatsApp. <span class=\"needs\">[NEEDS: texto TCPA aprobado]<\/span>", "Enviar"], "done": ["Listo, recibimos tus datos.", "<span class=\"needs\">[NEEDS: quién · cuándo · canal]<\/span> (Vista previa: no se envió nada.)"]}, "footer": ["Estavle no es un lender y no ofrece préstamos. Te conectamos con lenders y agentes de bienes raíces independientes. Cada lender decide la aprobación y las condiciones del préstamo.", "⌂ Equal Housing Opportunity <span class=\"needs\">[NEEDS: abogado]<\/span> · <span class=\"needs\">[NEEDS: nombre legal, NMLS ID, licencias]<\/span> · Términos · Privacidad · No vendan ni compartan mi información personal", "Imágenes ilustrativas. Las personas que aparecen no son clientes de Estavle. Algunas imágenes fueron creadas con inteligencia artificial."]}, "en": {"tagline": "A home of your own, even if you don’t know where to start.", "nav": ["Start", "The problem", "Estavle", "The plan", "For you", "Your step"], "scroll": "Scroll to continue", "illus": "Illustrative image", "prologo": {"lines": ["Every month you pay rent and think: someday.", "Someday, a home of your own. A place that’s yours.", "But it looks complicated, so you keep putting it off."], "title": "A home of your own", "subtitle": "Even if you don’t know where to start.", "enter": "See how"}, "problema": {"kicker": "Why it feels hard", "headline": "Wanting a home isn’t the problem.", "items": [["Nobody explains it", "You hear pre-qualification, down payment and closing, and almost nobody explains them in plain words."], ["You don’t know what they need", "You don’t know which documents you’ll need or what numbers the lender (the company that makes the loan) looks at."], ["A “no” sticks", "Someone told you no, or you think it can’t be done with a Tax ID (ITIN). So you stop asking."]]}, "guia": {"kicker": "Where Estavle comes in", "headline": "You don’t have to figure it out alone.", "body": "Estavle helps you find and finance your home. We explain every step and connect you with the right people and the programs that fit your case.", "trust": ["We’re not a bank or a lender. The lender decides.", "In Spanish or English, start to finish."]}, "plan": {"kicker": "How it works", "headline": "Three steps to a home of your own.", "steps": [["01", "Tell us about you", "A few questions from your phone: what you’re looking for, where you want to buy and how you file taxes. That tells us who to connect you with."], ["02", "Documents and a lender", "We give you your document list and connect you with a lender in our network who works with cases like yours. The lender decides if you pre-qualify."], ["03", "Find your home", "A real estate agent from our network helps you search, make an offer and get to closing."]], "pro": "Not the right time yet? Estavle Pro helps you get ready. <span class=\"needs\">[NEEDS: price and billing period]<\/span>"}, "parati": {"kicker": "For you", "headline": "Where are you today?", "hint": "Tap the one that sounds like you.", "chips": [["I don’t know where to start", "Start by telling us about you. We’ll tell you your first step."], ["It’s my first home", "We explain every term before you need it, so you can decide calmly."], ["I have a Tax ID (ITIN)", "Some lenders work with Tax ID borrowers. Tell us your case and we’ll tell you if there are options in your state."], ["I have little or no credit", "Every lender asks for something different. Tell us your case and we’ll tell you what’s missing, if anything."], ["I was already told no", "One lender’s no isn’t always everyone’s. Tell us what happened and we’ll look at what comes next."], ["I already found a home", "We’ll connect you with a lender in our network to review your case."]]}, "faq": {"kicker": "FAQ", "headline": "What people ask us most", "items": [["Does Estavle lend me the money?", "No. Estavle isn’t a bank or a lender. We connect you with lenders, and the lender reviews your case and decides."], ["How much does it cost?", "<span class=\"needs\">[NEEDS: free for buyers? who pays Estavle? Pro price]<\/span>"], ["Can I buy with a Tax ID (ITIN)?", "Some lenders offer loans to Tax ID borrowers, each with its own requirements. We’ll tell you if there are options in your state."], ["What do you do with my information?", "<span class=\"needs\">[NEEDS: privacy policy by counsel]<\/span>"], ["How long does it take?", "It depends on your case, the lender and the home. We’ll tell you what comes next at every step."]]}, "final": {"headline": "Your first step: a few questions.", "body": "From your phone. Based on what you tell us, we’ll tell you what comes next.", "button": "Start here", "micro": "No obligation. No judgment."}, "form": {"q": [["How can we help?", "", ["I want to buy a home", "I already found a home", "I want to get ready first (Estavle Pro)", "I’m a real estate agent"]], ["Do you have a Social Security number or a Tax ID?", "We only ask so we know which lenders to connect you with.", ["Social Security (SSN)", "Tax ID (ITIN)", "Neither yet", "I’d rather say later"]], ["When would you like to buy?", "", ["As soon as possible", "In the next 6 months", "In a year or more", "Not sure yet"]]], "contact": ["How should we reach you?", ["Name", "Mobile (WhatsApp)", "Email", "State where you want to buy"], "I agree that Estavle may contact me by call, text or WhatsApp. <span class=\"needs\">[NEEDS: approved TCPA text]<\/span>", "Send"], "done": ["Done, we got your info.", "<span class=\"needs\">[NEEDS: who · when · channel]<\/span> (Preview: nothing was sent.)"]}, "footer": ["Estavle is not a lender and does not make loans. We connect you with independent lenders and real estate agents. Each lender makes its own approval decisions and sets its own loan terms.", "⌂ Equal Housing Opportunity <span class=\"needs\">[NEEDS: counsel]<\/span> · <span class=\"needs\">[NEEDS: legal name, NMLS ID, licences]<\/span> · Terms · Privacy · Do not sell or share my personal information", "Illustrative images. The people shown are not Estavle customers. Some images were created with AI."]}};
+(()=>{
+const $=(s,c=document)=>c.querySelector(s),$$=(s,c=document)=>[...c.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let L='es';try{L=localStorage.getItem('estavle-lang')||'es'}catch(e){}if(location.hash==='#en')L='en';
+/* positions are in % of the 1600x905 illustration */
+const gl=(x,y,w,cls='')=>`<i class="gl ${cls}" style="left:${x}%;top:${y}%;width:${w}%"></i>`;
+/* cut-paper sprites (Higgsfield, transparent): pos = CSS, w = vw, d = depth for parallax */
+const sp=(n,pos,w,d,o={})=>`<i class="sp ${o.c||''}" style="${pos};width:${w}vw;--d:${d};--r:${o.r||0}deg;--r0:${o.r0??-24}deg;--fx:${o.fx||'0px'};--fy:${o.fy||'140px'};--dl:${o.dl||.9}s;--fl:${o.fl||1}"><b><img src="img/sp/${n}.webp" alt="" decoding="async"></b></i>`;
+const STONES=[[46.3,97],[49.2,87],[49.1,81.5],[53.4,75],[51.8,69],[47.8,63.5],[46.3,60.5],[47.8,57],[51.1,54],[52.6,52],[52.7,50.3]];
+const STARS=[[11.3,9.4],[5.7,21.4],[21.3,28.6],[40.5,14.7],[70.2,10.4],[80.8,27.6],[94.8,36.9]];
+function scenes(c){const rd=L==='en'?'Read chapter':'Leer capítulo';const st=c.plan.steps;return [
+ {id:'portada',nav:c.nav[0],img:1,vid:1,bg:'#1c46a8',fx:.5,fy:.6,mx:.62,ox:'84%',oy:'58%',
+  fx_:gl(84.1,57.5,30)+gl(83.6,67.5,7),
+  sp_:sp('colibri','left:29%;top:7%',8.5,70,{fx:'-40vw',fy:'-10vh',r0:10,c:'hover',dl:1.6})+sp('leaves','left:-3vw;bottom:-4vh',24,140,{fy:'30vh',r0:-8,dl:.5,c:'sway'})+sp('leaves','right:-4vw;bottom:-6vh',15,110,{fy:'30vh',r0:8,fl:-1,dl:.7,c:'sway'}),
+  txt:'cover',body:`<span class="n">Estavle</span><h1 class="h">${c.prologo.title.replace(/propia/,'<em>propia</em>').replace(/of your own/,'<em>of your own</em>')}</h1><p class="sub">${c.prologo.subtitle}</p><button class="read go" data-go="1">${c.prologo.enter} →</button>`},
+ {id:'problema',nav:c.nav[1],img:2,bg:'#cc5036',fx:0,mx:.78,ox:'70%',oy:'40%',
+  sp_:sp('papers','left:40%;top:60%',13,90,{fx:'20vw',fy:'-20vh',r:-8,r0:40,c:'drift',dl:1.2}),
+  txt:'left',body:`<span class="n"><b>i</b>${c.problema.kicker}</span><h2 class="h">${c.problema.headline}</h2><p class="sub">${L==='en'?'Three honest reasons it feels hard. None of them is you.':'Tres razones honestas por las que se siente difícil. Ninguna eres tú.'}</p><button class="read" data-page="problema">${rd}</button>`},
+ {id:'guia',nav:c.nav[2],img:3,vid:1,bg:'#023121',fx:.5,fy:.75,mx:.5,ox:'50%',oy:'45%',
+  fx_:`<div class="path">${STONES.map((p,k)=>`<i class="gl g" style="left:${p[0]}%;top:${p[1]}%;width:${11-k*.75}%;--k:${k}"></i>`).join('')}</div>`+gl(49.8,46,6),
+  sp_:sp('leaves','left:-4vw;bottom:-5vh',22,140,{fy:'30vh',r0:-8,dl:.5,c:'sway'})+sp('leaves','right:-4vw;bottom:-5vh',22,140,{fy:'30vh',r0:8,fl:-1,dl:.6,c:'sway'})+sp('colibri','left:71%;top:15%',6,60,{fx:'30vw',fy:'-20vh',fl:-1,r0:-10,c:'hover',dl:1.8}),
+  txt:'high',body:`<span class="n"><b>ii</b>${c.guia.kicker}</span><h2 class="h md">${c.guia.headline}</h2><button class="read" data-page="guia">${rd}</button>`},
+ {id:'paso1',nav:c.nav[3],img:4,bg:'#f5a72b',fx:0,mx:.78,ox:'72%',oy:'50%',ink:true,
+  fx_:gl(73.2,55.5,13,'g'),
+  sp_:sp('flor','right:-3vw;top:-6vh',21,80,{fy:'-40vh',r0:20,dl:.6,c:'sway'}),
+  txt:'left',body:`<span class="n"><b>${st[0][0]}</b>${c.plan.kicker}</span><h2 class="h md">${st[0][1]}</h2><p class="sub">${st[0][2]}</p>`},
+ {id:'paso2',nav:c.nav[3],img:5,bg:'#6699ea',fx:0,mx:.74,ox:'70%',oy:'60%',ink:true,
+  fx_:gl(88.5,77,12,'g'),
+  sp_:sp('papers','left:39%;top:7%',12,80,{fx:'30vw',fy:'0px',r:6,r0:-30,c:'drift',dl:1.1})+sp('leaves','left:-4vw;bottom:-6vh',18,130,{fy:'30vh',dl:.5,c:'sway'}),
+  txt:'left',body:`<span class="n"><b>${st[1][0]}</b>${c.plan.kicker}</span><h2 class="h md">${st[1][1]}</h2><p class="sub">${st[1][2]}</p>`},
+ {id:'paso3',nav:c.nav[3],img:6,bg:'#f6887b',fx:0,mx:.68,ox:'78%',oy:'50%',ink:true,
+  fx_:gl(80.4,54,16)+gl(81,22,26),
+  sp_:sp('keys','left:43%;top:55%',8,100,{fy:'-60vh',r:-6,r0:30,c:'swing',dl:1.5})+sp('flor','right:-3vw;top:-6vh',17,80,{fy:'-40vh',r0:20,dl:.6,c:'sway'}),
+  txt:'left',body:`<span class="n"><b>${st[2][0]}</b>${c.plan.kicker}</span><h2 class="h md">${st[2][1]}</h2><p class="sub">${st[2][2]}</p><button class="read dark" data-page="plan">${L==='en'?'Not ready yet?':'¿Todavía no?'}</button>`},
+ {id:'parati',nav:c.nav[4],img:7,bg:'#022618',fx:.5,fy:1,mx:.5,ox:'50%',oy:'100%',
+  fx_:STARS.map((p,k)=>`<i class="tw" style="left:${p[0]}%;top:${p[1]}%;--k:${k}"></i>`).join('')+[[8.9,90],[59.4,95.9],[79.7,94.5]].map(p=>`<i class="win-gl" style="left:${p[0]}%;top:${p[1]}%;width:9%"></i>`).join(''),
+  sp_:sp('flor','left:-3vw;top:-6vh',17,80,{fy:'-40vh',r0:-20,fl:-1,dl:.6,c:'sway night'})+sp('flor','right:-3vw;top:-6vh',17,80,{fy:'-40vh',r0:20,dl:.7,c:'sway night'}),
+  custom:true},
+ {id:'final',nav:c.nav[5],img:8,vid:1,bg:'#02241a',fx:.5,fy:1,mx:.47,ox:'46%',oy:'77%',
+  fx_:'<i class="lit"></i>'+`<i class="win-gl final-gl" style="left:45.8%;top:76.6%;width:22%"></i>`+gl(86.6,16.4,14),
+  sp_:sp('leaves','left:-4vw;bottom:-5vh',20,140,{fy:'30vh',dl:.5,c:'sway night'})+sp('leaves','right:-4vw;bottom:-5vh',20,140,{fy:'30vh',fl:-1,dl:.6,c:'sway night'}),
+  txt:'high',body:`<h2 class="h md">${c.final.headline}</h2><p class="sub">${c.final.body}</p><button class="read go open-flow">${c.final.button} →</button><p class="sub" style="font-size:13px;opacity:.8">${c.final.micro}</p>`}
+]}
+
+const PAGES=c=>({
+ problema:{k:c.problema.kicker,h:c.problema.headline,lead:L==='en'?'Three honest reasons. None of them is you.':'Tres razones honestas. Ninguna eres tú.',img:'img/il-2.jpg',items:c.problema.items},
+ guia:{k:c.guia.kicker,h:c.guia.headline,lead:c.guia.body,img:'img/il-3.jpg',items:c.guia.trust.map(t=>[t,''])},
+ plan:{k:c.plan.kicker,h:c.plan.headline,lead:c.plan.pro,img:'img/il-6.jpg',items:c.plan.steps.map(s=>[s[0]+' · '+s[1],s[2]])},
+ faq:{k:c.faq.kicker,h:c.faq.headline,faq:c.faq.items}
+});
+
+/* split headlines into rising words */
+function split(el){let i=0;const walk=n=>{[...n.childNodes].forEach(x=>{if(x.nodeType===3){const f=document.createDocumentFragment();x.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.append(' ');return}const o=document.createElement('span');o.className='w';const s=document.createElement('span');s.textContent=t;s.style.setProperty('--i',i++);o.append(s);f.append(o)});x.replaceWith(f)}else if(x.nodeType===1)walk(x)})};walk(el)}
+
+let S=[],cur=-1,lock=false;
+function build(){
+  const c=COPY[L];document.documentElement.lang=L;document.title='Estavle · '+c.tagline;
+  S=scenes(c);
+  $('#stage').innerHTML=S.map((s,i)=>`<section class="scene${s.vid?' has-v':''}" data-i="${i}" data-id="${s.id}" aria-label="${s.nav}" style="background:${s.bg}">
+    <div class="mv"><div class="cam"><div class="fr" style="--fx:${s.fx};--fy:${s.fy??.5};--mx:${s.mx};--ox:${s.ox};--oy:${s.oy}"><img src="img/il-${s.img}.jpg" alt="" ${i?'loading="lazy"':''} decoding="async">${s.vid?`<video class="vd" src="vid/il-${s.img}.mp4" muted loop playsinline preload="${i?'metadata':'auto'}" aria-hidden="true"></video>`:''}${s.fx_||''}</div></div></div><div class="spl">${s.sp_||''}</div>
+    ${s.custom?`<div class="bld"><span class="n" style="color:var(--maiz);justify-content:center">${c.parati.kicker}</span><h2 class="h md">${c.parati.headline}</h2>
+      <div class="facade" role="group">${c.parati.chips.map((x,j)=>`<button class="win" aria-pressed="false" data-j="${j}">${x[0]}</button>`).join('')}</div>
+      <p class="ans" id="ans" aria-live="polite">${c.parati.hint}</p></div>`:`<div class="txt ${s.txt||''} ${s.ink?'ink':''}">${s.body}</div>`}</section>`).join('');
+  $$('.scene .h').forEach(split);
+  const names=[...new Set(S.map(s=>s.nav))];
+  $('#dots').innerHTML=names.map(n=>`<button data-n="${n}" aria-label="${n}"><span>${n}</span></button>`).join('');
+  $$('#dots button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.nav===b.dataset.n)));
+  $('#lang').textContent=L==='en'?'ES':'EN';$('#cta').textContent=c.final.button;$('#faqb').textContent=c.faq.kicker;$('#skip').textContent=L==='en'?'Skip':'Saltar';
+  let lit=0;const wg=$$('[data-id=parati] .win-gl');
+  $$('.win').forEach(w=>w.onclick=()=>{$$('.win').forEach(x=>x.setAttribute('aria-pressed',x===w));$('#ans').textContent=c.parati.chips[+w.dataset.j][1];wg[lit++%wg.length].classList.add('on')});
+  $$('.scene video').forEach(v=>v.addEventListener('playing',()=>v.classList.add('ok'),{once:true}));
+  formBuild(c);
+  const keep=cur;cur=-1;go(Math.max(0,keep),true);
+}
+function go(i,instant){i=Math.max(0,Math.min(S.length-1,i));if(i===cur||lock)return;lock=true;
+  const sc=$$('.scene'),old=sc[cur],fwd=i>cur,s=sc[i];
+  sc.forEach(x=>{if(x!==old&&x!==s)x.classList.remove('on','under','rev')});
+  s.style.transition='none';s.classList.toggle('back',!fwd&&!!old);s.offsetWidth;s.style.transition='';
+  if(old){old.classList.remove('on');old.classList.add('under');old.classList.toggle('rev',!fwd);setTimeout(()=>old.classList.remove('under','rev'),reduce||instant?0:1200)}
+  cur=i;requestAnimationFrame(()=>requestAnimationFrame(()=>s.classList.add('on')));
+  const ink=!!S[i].ink,col=ink?'#141316':'#fff';$('.top').style.color=col;$('#tlogo').style.color=col;$('#navb').style.color=col;
+  $$('.dots button').forEach(d=>d.classList.toggle('on',d.dataset.n===S[i].nav));
+  $('#pos').textContent=`${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}`;
+  $('#prog').style.width=((i+1)/S.length*100)+'%';
+  const nx=$$('.scene img')[i+1];if(nx)nx.loading='eager';
+  $$('.scene video').forEach(v=>{if(v.closest('.scene')===s&&!reduce){v.play().catch(()=>{})}else setTimeout(()=>{if(!v.closest('.scene').classList.contains('on'))v.pause()},1300)});
+  setTimeout(()=>lock=false,reduce?60:1150)}
+
+/* input */
+$('#prev').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);
+let wl=0;addEventListener('wheel',e=>{if(busy())return;const n=Date.now();if(n-wl<1200||Math.abs(e.deltaY)<18)return;wl=n;go(cur+(e.deltaY>0?1:-1))},{passive:true});
+let ty=null;addEventListener('touchstart',e=>ty=e.touches[0].clientY,{passive:true});
+addEventListener('touchend',e=>{if(ty===null||busy())return;const d=ty-e.changedTouches[0].clientY;if(Math.abs(d)>50)go(cur+(d>0?1:-1));ty=null});
+addEventListener('keydown',e=>{if(busy()){if(e.key==='Escape'){closePage();$('#flow').classList.remove('open')}return}
+  if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}});
+const busy=()=>$('#page').classList.contains('open')||$('#flow').classList.contains('open')||!$('#intro').classList.contains('gone');
+/* the camera follows the pointer (or the phone's tilt) */
+let mx=0,my=0;addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;par()});
+addEventListener('deviceorientation',e=>{if(e.gamma==null)return;mx=Math.max(-.5,Math.min(.5,e.gamma/40));my=Math.max(-.5,Math.min(.5,(e.beta-40)/60));par()});
+function par(){if(reduce)return;const s=$$('.scene')[cur];if(!s)return;s.style.setProperty('--px',mx.toFixed(3));s.style.setProperty('--py',my.toFixed(3));$('.cam',s).style.transform=`translate(${(-mx*2.4).toFixed(2)}%,${(-my*2).toFixed(2)}%)`}
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(+b.dataset.go);const p=e.target.closest('[data-page]');if(p)openPage(p.dataset.page);if(e.target.closest('.open-flow'))openFlow()});
+$('#faqb').onclick=()=>openPage('faq');
+
+/* reading page */
+function openPage(k){const c=COPY[L],p=PAGES(c)[k];
+  $('#pin').innerHTML=`<div class="k">${p.k}</div><h3>${p.h}</h3>${p.lead?`<p class="lead">${p.lead}</p>`:''}${p.img?`<div class="ph" style="background-image:url(${p.img})"></div><div class="cap">${c.illus}</div>`:''}
+   ${p.items?`<div class="items">${p.items.map((it,i)=>`<div class="item"><i>${['i','ii','iii'][i]||'·'}</i><div><b>${it[0]}</b>${it[1]?`<p>${it[1]}</p>`:''}</div></div>`).join('')}</div>`:''}
+   ${p.faq?`<div style="margin-top:30px">${p.faq.map(q=>`<details><summary>${q[0]}</summary><div class="a">${q[1]}</div></details>`).join('')}</div>`:''}
+   <div class="legal">${c.footer.map(f=>`<p>${f}</p>`).join('')}</div>
+   <div class="next"><button class="tlink" id="pback">${L==='en'?'← Back to the story':'← Volver a la historia'}</button><button class="btn open-flow">${c.final.button} <i>→</i></button></div>`;
+  $('#page').classList.add('open');$('#page').scrollTop=0;$('#pback').onclick=closePage;$('#pclose').textContent=L==='en'?'Back':'Volver'}
+function closePage(){$('#page').classList.remove('open')}
+$('#pclose').onclick=closePage;
+
+/* form */
+function formBuild(c){const f=c.form;$('#sheet').innerHTML=`<div class="hd"><svg class="lg" role="img" aria-label="Estavle"><use href="#logo"/></svg><button class="close" id="fclose" aria-label="×">×</button></div>
+ <div class="fprog">${f.q.map(()=>'<i></i>').join('')}<i></i></div>
+ ${f.q.map(q=>`<div class="fq"><h4>${q[0]}</h4>${q[1]?`<p>${q[1]}</p>`:''}<div class="opts">${q[2].map(o=>`<button class="opt">${o}</button>`).join('')}</div></div>`).join('')}
+ <div class="fq"><h4>${f.contact[0]}</h4>${f.contact[1].map(p=>`<input class="inp" placeholder="${p}" aria-label="${p}">`).join('')}<p style="margin-top:12px">${f.contact[2]}</p><div class="opts"><button class="opt go">${f.contact[3]} →</button></div></div>
+ <div class="fq"><h4>${f.done[0]}</h4><p>${f.done[1]}</p></div>`;
+ const fq=$$('#sheet .fq'),pr=$$('#sheet .fprog i');let fi=0;const show=i=>{fi=i;fq.forEach((q,j)=>q.classList.toggle('on',j===i));pr.forEach((b,j)=>b.classList.toggle('on',j<=i))};
+ window._fs=show;$$('#sheet .opt').forEach(o=>o.onclick=()=>show(Math.min(fq.length-1,fi+1)));$('#fclose').onclick=()=>$('#flow').classList.remove('open')}
+function openFlow(){$('#flow').classList.add('open');window._fs(0)}
+$('#flow').addEventListener('click',e=>{if(e.target.id==='flow')$('#flow').classList.remove('open')});
+$('#lang').onclick=()=>{L=L==='en'?'es':'en';try{localStorage.setItem('estavle-lang',L)}catch(e){}build()};
+
+/* intro: the prologue, typed over a blurred cover */
+build();
+const T=$('#typed');let done=false;
+function finish(){if(done)return;done=true;$('#intro').classList.add('gone');$('#skip').style.display='none';const s=$$('.scene')[cur];if(s){s.classList.remove('on');requestAnimationFrame(()=>requestAnimationFrame(()=>s.classList.add('on')))}}
+$('#skip').onclick=finish;
+if(reduce||/[?&]skip/.test(location.search))finish();else (async()=>{for(const l of COPY[L].prologo.lines){if(done)return;T.textContent='';for(const ch of l){if(done)return;T.textContent+=ch;await new Promise(r=>setTimeout(r,38))}await new Promise(r=>setTimeout(r,950))}finish()})();
+})();
+</script>
+</body>
+</html>
