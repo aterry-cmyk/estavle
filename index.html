@@ -49,8 +49,8 @@ html,body{height:100%;overflow:hidden;background:var(--noche);color:#fff;font-fa
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--senal);outline-offset:3px;border-radius:6px}
-/* green ring is too faint on light/orange backgrounds: follow the text colour there, use ink on paper */
-.top :focus-visible,.nav :focus-visible{outline-color:currentColor}
+/* green ring is too faint on light/orange backgrounds: follow the header colour there, use ink on paper */
+.top :focus-visible,.nav :focus-visible{outline-color:var(--chrome,#fff)}
 .ink :focus-visible,#page :focus-visible,#flow :focus-visible{outline-color:var(--tinta)}
 .lg{display:block;height:24px;width:auto;aspect-ratio:1155.56/245.679;color:#fff;transition:color .6s}
 .needs{background:#FFE36B;color:#3a2a00;font-family:var(--sans);font-style:normal;font-weight:700;font-size:12px;padding:1px 6px;border-radius:5px}
@@ -350,7 +350,7 @@ function go(i,instant){i=Math.max(0,Math.min(S.length-1,i));if(i===cur||lock)ret
   s.style.transition='none';s.classList.toggle('back',!fwd&&!!old);s.offsetWidth;s.style.transition='';
   if(old){old.classList.remove('on');old.classList.add('under');old.classList.toggle('rev',!fwd);setTimeout(()=>old.classList.remove('under','rev'),reduce||instant?0:1200)}
   cur=i;requestAnimationFrame(()=>requestAnimationFrame(()=>s.classList.add('on')));
-  const ink=!!S[i].ink,col=ink?'#141316':'#fff';$('.top').style.color=col;$('#tlogo').style.color=col;$('#navb').style.color=col;
+  const ink=!!S[i].ink,col=ink?'#141316':'#fff';$('.top').style.color=col;document.documentElement.style.setProperty('--chrome',col);$('#tlogo').style.color=col;$('#navb').style.color=col;
   $$('.dots button').forEach(d=>d.classList.toggle('on',d.dataset.n===S[i].nav));
   $('#pos').textContent=`${String(i+1).padStart(2,'0')} / ${String(S.length).padStart(2,'0')}`;
   $('#prog').style.width=((i+1)/S.length*100)+'%';
