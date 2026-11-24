@@ -1,4 +1,21 @@
+# OS / editor clutter
 .DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.vscode/
+.idea/
+
+# Tooling and host CLIs (the site itself has no build step)
 node_modules
 .vercel
+.netlify
+.wrangler
+.firebase
+
+# Secrets: never commit
 .env*
+
+# Local scratch
+*.log
+tmp/
