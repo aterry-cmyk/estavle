@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Estavle</title>
 <meta name="description" content="Tu casa propia, aunque no sepas por dónde empezar.">
-<link rel="icon" href="brand/estavle-favicon.svg" type="image/svg+xml">
-<link rel="preload" as="image" href="img/il-1.jpg">
+<link rel="icon" href="assets/brand/estavle-favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="assets/img/il-1.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@ a{color:inherit}
 .prog{position:fixed;left:0;bottom:0;height:4px;background:var(--senal);z-index:31;transition:width 1s var(--ease)}
 
 /* intro */
-#intro{position:fixed;inset:0;z-index:60;background:#0b1a3d url(img/il-1.jpg) center/cover;display:grid;place-items:center;padding:24px;transition:opacity 1.2s var(--ease),visibility 0s 1.2s}
+#intro{position:fixed;inset:0;z-index:60;background:#0b1a3d url(assets/img/il-1.jpg) center/cover;display:grid;place-items:center;padding:24px;transition:opacity 1.2s var(--ease),visibility 0s 1.2s}
 #intro::before{content:"";position:absolute;inset:0;background:rgba(6,14,40,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 #intro.gone{opacity:0;visibility:hidden}
 #intro p{position:relative;font-family:var(--serif);font-size:clamp(24px,2.6vw,38px);line-height:1.3;max-width:26ch;text-align:center;min-height:3em}
@@ -252,7 +252,7 @@ let L='es';try{L=localStorage.getItem('estavle-lang')||'es'}catch(e){}if(locatio
 /* positions are in % of the 1600x905 illustration */
 const gl=(x,y,w,cls='')=>`<i class="gl ${cls}" style="left:${x}%;top:${y}%;width:${w}%"></i>`;
 /* cut-paper sprites (Higgsfield, transparent): pos = CSS, w = vw, d = depth for parallax */
-const sp=(n,pos,w,d,o={})=>`<i class="sp ${o.c||''}" style="${pos};width:${w}vw;--d:${d};--r:${o.r||0}deg;--r0:${o.r0??-24}deg;--fx:${o.fx||'0px'};--fy:${o.fy||'140px'};--dl:${o.dl||.9}s;--fl:${o.fl||1}"><b><img src="img/sp/${n}.webp" alt="" decoding="async"></b></i>`;
+const sp=(n,pos,w,d,o={})=>`<i class="sp ${o.c||''}" style="${pos};width:${w}vw;--d:${d};--r:${o.r||0}deg;--r0:${o.r0??-24}deg;--fx:${o.fx||'0px'};--fy:${o.fy||'140px'};--dl:${o.dl||.9}s;--fl:${o.fl||1}"><b><img src="assets/img/sprites/${n}.webp" alt="" decoding="async"></b></i>`;
 const STONES=[[46.3,97],[49.2,87],[49.1,81.5],[53.4,75],[51.8,69],[47.8,63.5],[46.3,60.5],[47.8,57],[51.1,54],[52.6,52],[52.7,50.3]];
 const STARS=[[11.3,9.4],[5.7,21.4],[21.3,28.6],[40.5,14.7],[70.2,10.4],[80.8,27.6],[94.8,36.9]];
 function scenes(c){const rd=L==='en'?'Read chapter':'Leer capítulo';const st=c.plan.steps;return [
@@ -290,9 +290,9 @@ function scenes(c){const rd=L==='en'?'Read chapter':'Leer capítulo';const st=c.
 ]}
 
 const PAGES=c=>({
- problema:{k:c.problema.kicker,h:c.problema.headline,lead:L==='en'?'Three honest reasons. None of them is you.':'Tres razones honestas. Ninguna eres tú.',img:'img/il-2.jpg',items:c.problema.items},
- guia:{k:c.guia.kicker,h:c.guia.headline,lead:c.guia.body,img:'img/il-3.jpg',items:c.guia.trust.map(t=>[t,''])},
- plan:{k:c.plan.kicker,h:c.plan.headline,lead:c.plan.pro,img:'img/il-6.jpg',items:c.plan.steps.map(s=>[s[0]+' · '+s[1],s[2]])},
+ problema:{k:c.problema.kicker,h:c.problema.headline,lead:L==='en'?'Three honest reasons. None of them is you.':'Tres razones honestas. Ninguna eres tú.',img:'assets/img/il-2.jpg',items:c.problema.items},
+ guia:{k:c.guia.kicker,h:c.guia.headline,lead:c.guia.body,img:'assets/img/il-3.jpg',items:c.guia.trust.map(t=>[t,''])},
+ plan:{k:c.plan.kicker,h:c.plan.headline,lead:c.plan.pro,img:'assets/img/il-6.jpg',items:c.plan.steps.map(s=>[s[0]+' · '+s[1],s[2]])},
  faq:{k:c.faq.kicker,h:c.faq.headline,faq:c.faq.items}
 });
 
@@ -304,7 +304,7 @@ function build(){
   const c=COPY[L];document.documentElement.lang=L;document.title='Estavle · '+c.tagline;
   S=scenes(c);
   $('#stage').innerHTML=S.map((s,i)=>`<section class="scene${s.vid?' has-v':''}" data-i="${i}" data-id="${s.id}" aria-label="${s.nav}" style="background:${s.bg}">
-    <div class="mv"><div class="cam"><div class="fr" style="--fx:${s.fx};--fy:${s.fy??.5};--mx:${s.mx};--ox:${s.ox};--oy:${s.oy}"><img src="img/il-${s.img}.jpg" alt="" ${i?'loading="lazy"':''} decoding="async">${s.vid?`<video class="vd" src="vid/il-${s.img}.mp4" muted loop playsinline preload="${i?'metadata':'auto'}" aria-hidden="true"></video>`:''}${s.fx_||''}</div></div></div><div class="spl">${s.sp_||''}</div>
+    <div class="mv"><div class="cam"><div class="fr" style="--fx:${s.fx};--fy:${s.fy??.5};--mx:${s.mx};--ox:${s.ox};--oy:${s.oy}"><img src="assets/img/il-${s.img}.jpg" alt="" ${i?'loading="lazy"':''} decoding="async">${s.vid?`<video class="vd" src="assets/video/il-${s.img}.mp4" muted loop playsinline preload="${i?'metadata':'auto'}" aria-hidden="true"></video>`:''}${s.fx_||''}</div></div></div><div class="spl">${s.sp_||''}</div>
     ${s.custom?`<div class="bld"><span class="n" style="color:var(--maiz);justify-content:center">${c.parati.kicker}</span><h2 class="h md">${c.parati.headline}</h2>
       <div class="facade" role="group">${c.parati.chips.map((x,j)=>`<button class="win" aria-pressed="false" data-j="${j}">${x[0]}</button>`).join('')}</div>
       <p class="ans" id="ans" aria-live="polite">${c.parati.hint}</p></div>`:`<div class="txt ${s.txt||''} ${s.ink?'ink':''}">${s.body}</div>`}</section>`).join('');
